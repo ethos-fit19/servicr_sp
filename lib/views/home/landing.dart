@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:servicr_sp/features/appointments/appointments_page.dart';
-import 'package:servicr_sp/features/home/home_page.dart';
-import 'package:servicr_sp/features/notifications/notifications_page.dart';
-import 'package:servicr_sp/features/profile/profile_page.dart';
-import 'package:servicr_sp/util/colors.dart';
+import 'package:servicr_client/views/appointments/appointments_page.dart';
+import 'package:servicr_client/views/home/home_page.dart';
+import 'package:servicr_client/views/notifications/notifications_page.dart';
+import 'package:servicr_client/views/profile/profile_page.dart';
+import 'package:servicr_client/constants.dart';
 
 class LandingPage extends StatefulWidget {
   LandingPage({Key? key}) : super(key: key);

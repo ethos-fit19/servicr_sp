@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../util/colors.dart';
+import '../../constants.dart';
 
 class AppointmentsPage extends StatefulWidget {
   AppointmentsPage({Key? key}) : super(key: key);

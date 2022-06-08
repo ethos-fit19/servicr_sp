@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:servicr_sp/landing.dart';
-import 'package:servicr_sp/features/login/login_page.dart';
-import 'package:servicr_sp/features/register/register_page.dart';
+import 'package:servicr_client/views/home/landing.dart';
+import 'package:servicr_client/views/login/login_page.dart';
+import 'package:servicr_client/views/register/register_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class WelcomePage extends StatelessWidget {
                 height: 24,
               ),
               Image.asset(
-                './assets/images/handyman.jpg',
+                './assets/images/Worker.png',
                 width: 400,
               ),
               SizedBox(

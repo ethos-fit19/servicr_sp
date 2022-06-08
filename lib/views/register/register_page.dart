@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:servicr_sp/features/login/login_page.dart';
+import 'package:servicr_client/views/login/login_page.dart';
 import 'package:get/get.dart';
+import 'package:get/get_utils/get_utils.dart';
 
-import '../../landing.dart';
+import '../home/landing.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -15,8 +16,73 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
+    var emailController = TextEditingController();
+    var passwordController = TextEditingController();
+    var nameController = TextEditingController();
+
+    void _registration() {
+      String name = nameController.text.trim();
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+
+      if (name.isEmpty) {
+        Get.snackbar(
+          "Error",
+          "Enter your name",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+        );
+      } else if (email.isEmpty) {
+        Get.snackbar(
+          "Error",
+          "Enter your email",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+        );
+      } else if (!GetUtils.isEmail(email)) {
+        Get.snackbar(
+          "Error",
+          "Email not valid",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+        );
+      } else if (password.isEmpty) {
+        Get.snackbar(
+          "Error",
+          "Enter your password",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+        );
+      } else if (password.length < 6) {
+        Get.snackbar(
+          "Error",
+          "Password less than 6 characters",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+        );
+      } else {
+        Get.snackbar(
+          "Success",
+          "Check email for verification",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          duration: Duration(seconds: 4),
+          isDismissible: true,
+        );
+      }
+    }
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
@@ -46,7 +112,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Column(
               children: [
-                const TextField(
+                TextField(
+                  controller: nameController,
                   decoration: InputDecoration(
                     labelText: "Name",
                     prefixIcon: Icon(Ionicons.person_outline),
@@ -55,7 +122,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(
                   height: 24,
                 ),
-                const TextField(
+                TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: "Email",
                     prefixIcon: Icon(Ionicons.mail_outline),
@@ -64,7 +132,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(
                   height: 24,
                 ),
-                const TextField(
+                TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: "Password",
                     prefixIcon: Icon(Ionicons.lock_closed_outline),
@@ -80,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     minimumSize: const Size.fromHeight(50),
                     // primary: Colors.black,
                   ),
-                  onPressed: () => {Get.to(LandingPage())},
+                  onPressed: () => _registration(),
                 )
               ],
             ),

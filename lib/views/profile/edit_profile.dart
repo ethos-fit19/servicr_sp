@@ -1,47 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:servicr_sp/features/register/register_page.dart';
-import 'package:servicr_sp/landing.dart';
-import 'package:servicr_sp/welcome.dart';
+import 'package:get/get.dart';
+import 'package:servicr_client/views/home/home_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class ProfileEditPage extends StatefulWidget {
+  const ProfileEditPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-            onPressed: () => {Get.to(WelcomePage())},
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Colors.black,
-            )),
+        centerTitle: true,
+        title: Text("Edit Profile"),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text(
-              "Login",
-              style: TextStyle(
-                fontSize: 28,
-              ),
-            ),
             Column(
               children: [
                 const TextField(
@@ -67,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                     minimumSize: const Size.fromHeight(50),
                     // primary: Colors.black,
                   ),
-                  onPressed: () => {Get.to(LandingPage())},
+                  onPressed: () => {},
                 )
               ],
             ),
@@ -80,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RegisterPage(),
+                        builder: (context) => HomePage(),
                       ),
                     );
                   },
