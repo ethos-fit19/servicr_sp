@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:servicr_client/views/register/register_page.dart';
-import 'package:servicr_client/views/home/landing.dart';
-import 'package:servicr_client/views/welcome/welcome.dart';
+import 'package:servicr_sp/views/register/register_page.dart';
+import 'package:servicr_sp/views/home/landing.dart';
+import 'package:servicr_sp/views/welcome/welcome.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

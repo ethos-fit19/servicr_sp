@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:servicr_client/views/home/landing.dart';
-import 'package:servicr_client/views/login/login_page.dart';
-import 'package:servicr_client/views/register/register_page.dart';
+import 'package:servicr_sp/views/home/landing.dart';
+import 'package:servicr_sp/views/login/login_page.dart';
+import 'package:servicr_sp/views/register/register_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);

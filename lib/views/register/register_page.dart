@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:servicr_client/views/login/login_page.dart';
+import 'package:servicr_sp/views/login/login_page.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
 
