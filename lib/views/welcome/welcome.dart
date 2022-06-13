@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:servicr_sp/views/home/landing.dart';
+//import 'package:servicr_sp/views/home/landing.dart';
 import 'package:servicr_sp/views/login/login_page.dart';
 import 'package:servicr_sp/views/register/register_page.dart';
 
@@ -31,7 +31,7 @@ class WelcomePage extends StatelessWidget {
                 height: 24,
               ),
               Image.asset(
-                './assets/images/Worker.png',
+                './assets/images/sp_welcome.jpg',
                 width: 400,
               ),
               SizedBox(
