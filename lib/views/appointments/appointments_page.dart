@@ -27,7 +27,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
              // backgroundColor: Color(0xFF021E4B),
               cellBorderColor: Color(0xFF0D67F6),
-                view: CalendarView.month,
+                view: CalendarView.month, 
                 dataSource: MeetingDataSource(_getDataSource()),
                 monthViewSettings: const MonthViewSettings(
                     showAgenda: true,
