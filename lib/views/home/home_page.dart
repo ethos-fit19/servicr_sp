@@ -186,11 +186,13 @@ class DashboardScreen extends StatelessWidget {
                             mLeft: 0,
                             mRight: 3,
                             child: const ListTileCustom(
+
                               bgColor:Color(0xFFF7E3FF),
                               //pathIcon: ".assets/icons/line.svg",
-                              pathIcon:"line.svg",
+                              pathIcon:"I1.png",
                               title: "Profit Against Last Month",
-                              subTitle: "\$3.3",
+                              subTitle: "Rs1090",
+                              
                             ),
                           ),
                           CardCustom(
@@ -202,7 +204,7 @@ class DashboardScreen extends StatelessWidget {
                               bgColor: Colors.lightGreenAccent,
                               pathIcon: "salary-svgrepo-com.svg",
                               title: "Monthly Income",
-                              subTitle: "\$43.3",
+                              subTitle: "Rs9500",
                             ),
                           ),
                         ],
@@ -257,7 +259,7 @@ class DashboardScreen extends StatelessWidget {
                                     const Padding(
 
                                       padding: EdgeInsets.only(right: 5),
-                                      child: Text(" Peak Point: \$20.009",style: TextStyle(
+                                      child: Text(" Peak Point: RS 2000",style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
                                           color: Colors.black
@@ -517,7 +519,8 @@ class ListTileCustom extends StatelessWidget {
   const ListTileCustom({
     Key? key,
     required this.bgColor,
-    required this.pathIcon, required this.title,
+    required this.pathIcon, 
+    required this.title,
     required this.subTitle,
   }) : super(key: key);
 
