@@ -64,7 +64,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
     meetings.add(
         Meeting(
-            'Repair tanks                                                    \Rs.1000 Per Hr', DateTime(today.year, today.month, 16, 8, 0, 0), DateTime(today.year, today.month, today.day, 9, 30, 0), const Color(0xFF073797), false));
+            'Repair tanks                                                    \Rs.1000 Per Hr', DateTime(today.year, today.month, 18, 8, 0, 0), DateTime(today.year, today.month, today.day, 9, 30, 0), const Color(0xFF073797), false));
 
     meetings.add(
         Meeting(
