@@ -157,30 +157,30 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
 
-                    TextField(
-                      decoration: new InputDecoration(
-                        prefixIcon: new Icon(
-                          Icons.logout_rounded,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        labelText: "LOGOUT",
-                        suffixIcon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                      ),
-                    ),
+                    // TextField(
+                    //   decoration: new InputDecoration(
+                    //     prefixIcon: new Icon(
+                    //       Icons.logout_rounded,
+                    //       color: Colors.blueGrey,
+                    //       size: 30,
+                    //     ),
+                    //     labelText: "LOGOUT",
+                    //     suffixIcon: Icon(
+                    //       Icons.arrow_forward_ios,
+                    //       color: Colors.blueGrey,
+                    //     ),
+                    //     enabledBorder: const OutlineInputBorder(
+                    //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    //       borderSide: const BorderSide(
+                    //         color: Colors.blueAccent,
+                    //       ),
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    //       borderSide: BorderSide(color: Colors.blue),
+                    //     ),
+                    //   ),
+                    // ),
 
                     // textfield(
                     //    hintText: 'Settings',
@@ -217,13 +217,7 @@ class ProfilePage extends StatelessWidget {
               )
             ],
           ),
-          // CustomPaint(
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: MediaQuery.of(context).size.height,
-          //   ),
-          //   painter: HeaderCurvedContainer(),
-          // ),
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -267,12 +261,7 @@ class ProfilePage extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              Text(
-                '+94785612907',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
+
               Text(
                 'Kandy',
                 style: TextStyle(

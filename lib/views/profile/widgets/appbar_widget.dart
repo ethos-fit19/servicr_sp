@@ -1,0 +1,8 @@
+import 'package:flutter/material.dart';
+
+AppBar buildAppBar(BuildContext context) {
+  return AppBar(
+    iconTheme: IconThemeData(color: Colors.black), // set back button color here which will reflect in all screens.
+    leading: BackButton(), backgroundColor: Colors.blueAccent, elevation: 0,
+  );
+}
