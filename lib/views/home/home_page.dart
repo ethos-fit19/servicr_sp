@@ -71,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
    
     },);
 
-    print(totalIncomePerMonth(currentMonth,currentYear));
+    print(totalThisMonth);
   }
 
   int totalIncomePerMonth(var month, var yr){
@@ -134,14 +134,20 @@ int customersPerMonth(var month){
   }
 
   percentage(){
-    return (((totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome())/lastMonthIncome())*100).roundToDouble();
+    return (((totalThisMonth-totalLastMonth)/totalLastMonth)*100).roundToDouble();
   }
+
+  int totalThisMonth =  0;
+  int totalLastMonth = 0;
 
     @override
   void initState(){
     super.initState();
     GetAppointmentsOfSP(uid);
     getReviews();
+    totalThisMonth =  totalIncomePerMonth(currentMonth,currentYear);
+   totalLastMonth = lastMonthIncome();
+
   }
 
 
@@ -202,7 +208,7 @@ int customersPerMonth(var month){
                         child: Column(
                           children: [
                             CustomPaint(
-                              foregroundPainter: CircleProgress(((totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome())/lastMonthIncome())),
+                              foregroundPainter: CircleProgress(((totalThisMonth-totalLastMonth)/totalLastMonth)),
                               child: SizedBox(
                                 width: 107,
                                 height: 107,
@@ -224,7 +230,7 @@ int customersPerMonth(var month){
                                       mainAxisAlignment:
                                       MainAxisAlignment.center,
                                       children: [
-                                         ((totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome())/lastMonthIncome())>0? const Icon(
+                                         ((totalThisMonth-totalLastMonth)/totalLastMonth)>0? const Icon(
                                           Icons.arrow_upward_outlined,
                                           color: Colors.blue,
                                           size: 14,
@@ -244,7 +250,7 @@ int customersPerMonth(var month){
                                 ),
                               ),
                             ),
-                             totalIncomePerMonth(currentMonth,currentYear)>0?
+                             totalThisMonth>0?
                              
                             Text(
                               "NEW ACHIEVMENT",
@@ -312,7 +318,7 @@ int customersPerMonth(var month){
                               //pathIcon: ".assets/icons/line.svg",
                               pathIcon:"I1.png",
                               title: "Profit Against Last Month",
-                              subTitle:'Rs '+(totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome()).toString()
+                              subTitle:'Rs '+(totalThisMonth-totalLastMonth).toString()
                               
                             ),
                           ),
@@ -325,7 +331,7 @@ int customersPerMonth(var month){
                               bgColor: Colors.lightGreenAccent,
                               pathIcon: "salary-svgrepo-com.svg",
                               title: "Monthly Income",
-                              subTitle: 'Rs ${totalIncomePerMonth(currentMonth,currentYear)}',
+                              subTitle: 'Rs ${totalThisMonth}',
                             ),
                           ),
                         ],
@@ -380,7 +386,7 @@ int customersPerMonth(var month){
                                      Padding(
 
                                       padding: EdgeInsets.only(right: 5),
-                                      child: Text(" Peak Point: "+(lastMonthIncome()<totalIncomePerMonth(currentMonth, currentYear)?totalIncomePerMonth(currentMonth,currentYear).toString():lastMonthIncome().toString()),
+                                      child: Text(" Peak Point: "+(totalLastMonth<totalThisMonth?totalThisMonth.toString():totalLastMonth.toString()),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -450,8 +456,8 @@ int customersPerMonth(var month){
                                       lineBarsData: [
                                        LineChartBarData(spots: [
                                          //DATA
-                                          FlSpot(1, double.parse(totalIncomePerMonth(currentMonth, currentYear).toString())),
-                                          FlSpot(0, double.parse(lastMonthIncome().toString())),
+                                          FlSpot(1, double.parse(totalThisMonth.toString())),
+                                          FlSpot(0, double.parse(totalLastMonth.toString())),
                                         
                                       ]
                                        ),
