@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import '../../local.dart';
 import '../home/theme.dart';
 import '../../constants.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '';
+import 'package:intl/intl.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -17,6 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,15 +30,120 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Text("Home SP"),
         ),
-        body: const DashboardScreen(),
+        body: DashboardScreen(),
         );
   }
 }
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
+
   const DashboardScreen({
-    Key? key,
+    Key? key, 
   }) : super(key: key);
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+
+    String currentMonth = DateTime.now().toString().substring(5,7);
+    String currentYear = DateTime.now().toString().substring(0,4);
+    String MonthName = DateFormat("MMMM").format(DateTime.now());
+
+  List appointments = [];
+  List acceptedAppointments= [];
+  List reviews = [];
+
+  GetAppointmentsOfSP(uid) async {
+    print("URL:  "+apiUrl+'appointments/servicer/'+uid);
+    var res = await Dio().get(apiUrl+'/appointments/servicer/'+uid);
+    Map<String, dynamic> responseJSON = await json.decode(res.toString());
+    
+    setState(() {
+      appointments=responseJSON['data'];
+    });
+
+    appointments.forEach((element) {
+      setState(() {
+           element['serviceAcceptedStatus']==true?acceptedAppointments.add(element):'';
+      });
+   
+    },);
+
+    print(totalIncomePerMonth(currentMonth,currentYear));
+  }
+
+  int totalIncomePerMonth(var month, var yr){
+    int total =0;
+    acceptedAppointments.forEach((element) {
+      String mon =element['date'].toString().substring(5,7);
+      String year = element['date'].toString().substring(0,4);
+      
+      (int.parse(mon)==int.parse(month) &&int.parse(yr)==int.parse(year))?total+=element['price'] as int:0;
+    
+    });
+    return total;
+  }
+
+  int lastMonthIncome(){
+    int lastMonth = (currentMonth=='1')?12: (int.parse(currentMonth)-1);
+    int year = currentMonth=='1'?int.parse(currentYear)-1:int.parse(currentYear);
+    
+    return totalIncomePerMonth(lastMonth.toString(),year.toString());
+  }
+
+int customersPerMonth(var month){
+  int customers =0;
+  acceptedAppointments.forEach((element) {
+     String mon =element['date'].toString().substring(5,7);
+      String year = element['date'].toString().substring(0,4);
+     customers+= (int.parse(mon)==int.parse(month) &&int.parse(currentYear)==int.parse(year))?1:0;
+  });
+  return customers;
+}
+
+ getReviews() async {
+    try {
+      var response = await Dio().get('$apiUrl/reviews');
+      Map<String, dynamic> responseJSON =
+          await json.decode(response.toString());
+
+      setState(() {
+        reviews = responseJSON['data'];
+      });
+
+      print('res: $responseJSON');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  
+  List newReviewsInMonth() {
+    List res = [];
+    var total = 0;
+    var monthly =0;
+    reviews.forEach((element) {
+      element['servicer'].contains(uid) ? {res.add(element),total+=1 }: '';
+    });
+    res.forEach((ele) {
+     ele['addedOn'].toString().substring(5,7)==currentMonth?monthly+=1:'';
+    });
+    return [monthly,total] ;
+  }
+
+  percentage(){
+    return (((totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome())/lastMonthIncome())*100).roundToDouble();
+  }
+
+    @override
+  void initState(){
+    super.initState();
+    GetAppointmentsOfSP(uid);
+    getReviews();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +202,7 @@ class DashboardScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             CustomPaint(
-                              foregroundPainter: CircleProgress(),
+                              foregroundPainter: CircleProgress(((totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome())/lastMonthIncome())),
                               child: SizedBox(
                                 width: 107,
                                 height: 107,
@@ -100,7 +211,7 @@ class DashboardScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "January",
+                                      MonthName.toUpperCase(),
                                       style: textSemiBold,
                                     ),
                                     Text(
@@ -113,13 +224,18 @@ class DashboardScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                       MainAxisAlignment.center,
                                       children: [
-                                        const Icon(
+                                         ((totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome())/lastMonthIncome())>0? const Icon(
                                           Icons.arrow_upward_outlined,
                                           color: Colors.blue,
                                           size: 14,
+                                        ):
+                                         const Icon(
+                                          Icons.arrow_downward_outlined,
+                                          color: Colors.red,
+                                          size: 14,
                                         ),
                                         Text(
-                                          "40%",
+                                         '0',
                                           style: textSemiBold,
                                         ),
                                       ],
@@ -128,15 +244,20 @@ class DashboardScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-
+                             totalIncomePerMonth(currentMonth,currentYear)>0?
+                             
                             Text(
                               "NEW ACHIEVMENT",
                               style: textBold2,
+                            ): Text(
+                              "NO",
+                              style: textBold3,
                             ),
                             Text(
                               "PROFIT !!",
                               style: textBold3,
                             ),
+                             
                           ],
                         ),
                       ),
@@ -182,27 +303,29 @@ class DashboardScreen extends StatelessWidget {
                         children: [
                           CardCustom(
                             width: size.width / 2 - 23,
-                            height: 88.9,
+                            height: 100,
                             mLeft: 0,
                             mRight: 3,
-                            child: const ListTileCustom(
+                            child:  ListTileCustom(
+
                               bgColor:Color(0xFFF7E3FF),
                               //pathIcon: ".assets/icons/line.svg",
-                              pathIcon:"line.svg",
+                              pathIcon:"I1.png",
                               title: "Profit Against Last Month",
-                              subTitle: "\$3.3",
+                              subTitle:'Rs '+(totalIncomePerMonth(currentMonth,currentYear)-lastMonthIncome()).toString()
+                              
                             ),
                           ),
                           CardCustom(
                             width: size.width / 2 - 23,
-                            height: 88.9,
+                            height:100,
                             mLeft: 3,
                             mRight: 0,
-                            child: const ListTileCustom(
+                            child:  ListTileCustom(
                               bgColor: Colors.lightGreenAccent,
                               pathIcon: "salary-svgrepo-com.svg",
                               title: "Monthly Income",
-                              subTitle: "\$43.3",
+                              subTitle: 'Rs ${totalIncomePerMonth(currentMonth,currentYear)}',
                             ),
                           ),
                         ],
@@ -214,11 +337,11 @@ class DashboardScreen extends StatelessWidget {
                             height: 88.9,
                             mLeft: 0,
                             mRight: 3,
-                            child: const ListTileCustom(
+                            child:  ListTileCustom(
                               bgColor: Color(0xFFFFF7DF),
                               pathIcon: "starts.svg",
                               title: "Reviews",
-                              subTitle: "+10",
+                              subTitle:newReviewsInMonth()[0].toString()+'/'+newReviewsInMonth()[1].toString(),
                             ),
                           ),
                           CardCustom(
@@ -226,11 +349,11 @@ class DashboardScreen extends StatelessWidget {
                             height: 88.9,
                             mLeft: 3,
                             mRight: 0,
-                            child: const ListTileCustom(
+                            child: ListTileCustom(
                               bgColor: Color(0xFFDEF7FF),
                               pathIcon: "eyes.svg",
                               title: "Total Customers",
-                              subTitle: "8",
+                              subTitle:customersPerMonth(currentMonth).toString(),
                             ),
                           ),
                         ],
@@ -254,10 +377,11 @@ class DashboardScreen extends StatelessWidget {
                                           color: Color(0xFF0B45DC)
                                       ),
                                     ),
-                                    const Padding(
+                                     Padding(
 
                                       padding: EdgeInsets.only(right: 5),
-                                      child: Text(" Peak Point: \$20.009",style: TextStyle(
+                                      child: Text(" Peak Point: "+(lastMonthIncome()<totalIncomePerMonth(currentMonth, currentYear)?totalIncomePerMonth(currentMonth,currentYear).toString():lastMonthIncome().toString()),
+                                      style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
                                           color: Colors.black
@@ -318,27 +442,21 @@ class DashboardScreen extends StatelessWidget {
                                 width: double.infinity,
                                 height: 300,
                                 //color: Colors.blue,
-                                child: LineChart(
-                                  LineChartData(
+                                child:
+                                totalIncomePerMonth(currentMonth, currentYear)>0?
+                                LineChart(
+                                  LineChartData( 
                                       borderData: FlBorderData(show: false),
                                       lineBarsData: [
                                        LineChartBarData(spots: [
                                          //DATA
-                                        const FlSpot(0, 1),
-                                        const FlSpot(1, 3),
-                                        const FlSpot(2, 10.56),
-                                        const FlSpot(3, 7.3),
-                                        const FlSpot(4, 12),
-                                        const FlSpot(5, 2.98),
-                                        const FlSpot(6, 17),
-                                        const FlSpot(7, 15.88),
-                                        const FlSpot(8, 13),
-                                         const FlSpot(9,12),
-                                         const FlSpot(10,20)
+                                          FlSpot(1, double.parse(totalIncomePerMonth(currentMonth, currentYear).toString())),
+                                          FlSpot(0, double.parse(lastMonthIncome().toString())),
+                                        
                                       ]
                                        ),
                                   ]),
-                                ),
+                                ):Container()
                               ),
 
                               // Container(
@@ -432,7 +550,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  void setState(Null Function() param0) {}
+
 }
 
 class CardCustom extends StatelessWidget{
@@ -481,8 +599,8 @@ class CardCustom extends StatelessWidget{
 
 }
 class CircleProgress extends CustomPainter {
-
-  CircleProgress();
+  double progress;
+  CircleProgress(this.progress);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -501,7 +619,7 @@ class CircleProgress extends CustomPainter {
     double radius = min(size.width/2, size.height/2 )-7;
 
     canvas.drawCircle(center, radius, outerCircle);
-    double angle = 2 * pi * ( 40/100);
+    double angle = 2 * pi * ( progress);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi/2, angle, false, completeArc);
 
 
@@ -517,7 +635,8 @@ class ListTileCustom extends StatelessWidget {
   const ListTileCustom({
     Key? key,
     required this.bgColor,
-    required this.pathIcon, required this.title,
+    required this.pathIcon, 
+    required this.title,
     required this.subTitle,
   }) : super(key: key);
 
