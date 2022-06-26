@@ -11,7 +11,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -20,25 +19,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Home SP"),
-        ),
-        body: DashboardScreen(),
-        );
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Home"),
+      ),
+      body: DashboardScreen(),
+    );
   }
 }
 
 class DashboardScreen extends StatefulWidget {
-
   const DashboardScreen({
-    Key? key, 
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -46,64 +41,72 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
-    String currentMonth = DateTime.now().toString().substring(5,7);
-    String currentYear = DateTime.now().toString().substring(0,4);
-    String MonthName = DateFormat("MMMM").format(DateTime.now());
+  String currentMonth = DateTime.now().toString().substring(5, 7);
+  String currentYear = DateTime.now().toString().substring(0, 4);
+  String MonthName = DateFormat("MMMM").format(DateTime.now());
 
   List appointments = [];
-  List acceptedAppointments= [];
+  List acceptedAppointments = [];
   List reviews = [];
 
   GetAppointmentsOfSP(uid) async {
-    print("URL:  "+apiUrl+'appointments/servicer/'+uid);
-    var res = await Dio().get(apiUrl+'/appointments/servicer/'+uid);
+    print("URL:  " + apiUrl + 'appointments/servicer/' + uid);
+    var res = await Dio().get(apiUrl + '/appointments/servicer/' + uid);
     Map<String, dynamic> responseJSON = await json.decode(res.toString());
-    
+
     setState(() {
-      appointments=responseJSON['data'];
+      appointments = responseJSON['data'];
     });
 
-    appointments.forEach((element) {
-      setState(() {
-           element['serviceAcceptedStatus']==true?acceptedAppointments.add(element):'';
-      });
-   
-    },);
+    appointments.forEach(
+      (element) {
+        setState(() {
+          element['serviceAcceptedStatus'] == true
+              ? acceptedAppointments.add(element)
+              : '';
+        });
+      },
+    );
 
     print(totalThisMonth);
   }
 
-  int totalIncomePerMonth(var month, var yr){
-    int total =0;
+  int totalIncomePerMonth(var month, var yr) {
+    int total = 0;
     acceptedAppointments.forEach((element) {
-      String mon =element['date'].toString().substring(5,7);
-      String year = element['date'].toString().substring(0,4);
-      
-      (int.parse(mon)==int.parse(month) &&int.parse(yr)==int.parse(year))?total+=element['price'] as int:0;
-    
+      String mon = element['date'].toString().substring(5, 7);
+      String year = element['date'].toString().substring(0, 4);
+
+      (int.parse(mon) == int.parse(month) && int.parse(yr) == int.parse(year))
+          ? total += element['price'] as int
+          : 0;
     });
     return total;
   }
 
-  int lastMonthIncome(){
-    int lastMonth = (currentMonth=='1')?12: (int.parse(currentMonth)-1);
-    int year = currentMonth=='1'?int.parse(currentYear)-1:int.parse(currentYear);
-    
-    return totalIncomePerMonth(lastMonth.toString(),year.toString());
+  int lastMonthIncome() {
+    int lastMonth = (currentMonth == '1') ? 12 : (int.parse(currentMonth) - 1);
+    int year = currentMonth == '1'
+        ? int.parse(currentYear) - 1
+        : int.parse(currentYear);
+
+    return totalIncomePerMonth(lastMonth.toString(), year.toString());
   }
 
-int customersPerMonth(var month){
-  int customers =0;
-  acceptedAppointments.forEach((element) {
-     String mon =element['date'].toString().substring(5,7);
-      String year = element['date'].toString().substring(0,4);
-     customers+= (int.parse(mon)==int.parse(month) &&int.parse(currentYear)==int.parse(year))?1:0;
-  });
-  return customers;
-}
+  int customersPerMonth(var month) {
+    int customers = 0;
+    acceptedAppointments.forEach((element) {
+      String mon = element['date'].toString().substring(5, 7);
+      String year = element['date'].toString().substring(0, 4);
+      customers += (int.parse(mon) == int.parse(month) &&
+              int.parse(currentYear) == int.parse(year))
+          ? 1
+          : 0;
+    });
+    return customers;
+  }
 
- getReviews() async {
+  getReviews() async {
     try {
       var response = await Dio().get('$apiUrl/reviews');
       Map<String, dynamic> responseJSON =
@@ -119,43 +122,41 @@ int customersPerMonth(var month){
     }
   }
 
-  
   List newReviewsInMonth() {
     List res = [];
     var total = 0;
-    var monthly =0;
+    var monthly = 0;
     reviews.forEach((element) {
-      element['servicer'].contains(uid) ? {res.add(element),total+=1 }: '';
+      element['servicer'].contains(uid) ? {res.add(element), total += 1} : '';
     });
     res.forEach((ele) {
-     ele['addedOn'].toString().substring(5,7)==currentMonth?monthly+=1:'';
+      ele['addedOn'].toString().substring(5, 7) == currentMonth
+          ? monthly += 1
+          : '';
     });
-    return [monthly,total] ;
+    return [monthly, total];
   }
 
-  percentage(){
-    return (((totalThisMonth-totalLastMonth)/totalLastMonth)*100).roundToDouble();
+  percentage() {
+    return (((totalThisMonth - totalLastMonth) / totalLastMonth) * 100)
+        .roundToDouble();
   }
 
-  int totalThisMonth =  0;
+  int totalThisMonth = 0;
   int totalLastMonth = 0;
 
-    @override
-  void initState(){
+  @override
+  void initState() {
     super.initState();
     GetAppointmentsOfSP(uid);
     getReviews();
-    totalThisMonth =  totalIncomePerMonth(currentMonth,currentYear);
-   totalLastMonth = lastMonthIncome();
-
+    totalThisMonth = totalIncomePerMonth(currentMonth, currentYear);
+    totalLastMonth = lastMonthIncome();
   }
-
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     int _selectedIndex = 0;
     // const List<Widget> _widgetOptions = <Widget>[
     //   // Text('Home Page',
@@ -168,11 +169,11 @@ int customersPerMonth(var month){
     //   //     style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
     // ];
 
-     _onItemTapped(int index){
-       setState((){
-         _selectedIndex=index;
-       });
-     }
+    _onItemTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -180,17 +181,17 @@ int customersPerMonth(var month){
         elevation: 0.0,
         actions: const [
           Padding(
-              padding: EdgeInsets.all(8),
-          child: Center(
-            child: CircleAvatar(
-              maxRadius: 20,
-              backgroundImage: NetworkImage("https://jooinn.com/images/man39s-face-11.jpg"),
+            padding: EdgeInsets.all(8),
+            child: Center(
+              child: CircleAvatar(
+                maxRadius: 20,
+                backgroundImage: NetworkImage(
+                    "https://jooinn.com/images/man39s-face-11.jpg"),
+              ),
             ),
-           ),
           )
         ],
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -198,7 +199,8 @@ int customersPerMonth(var month){
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -208,7 +210,9 @@ int customersPerMonth(var month){
                         child: Column(
                           children: [
                             CustomPaint(
-                              foregroundPainter: CircleProgress(((totalThisMonth-totalLastMonth)/totalLastMonth)),
+                              foregroundPainter: CircleProgress(
+                                  ((totalThisMonth - totalLastMonth) /
+                                      totalLastMonth)),
                               child: SizedBox(
                                 width: 107,
                                 height: 107,
@@ -226,22 +230,25 @@ int customersPerMonth(var month){
                                     ),
                                     Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: [
-                                         ((totalThisMonth-totalLastMonth)/totalLastMonth)>0? const Icon(
-                                          Icons.arrow_upward_outlined,
-                                          color: Colors.blue,
-                                          size: 14,
-                                        ):
-                                         const Icon(
-                                          Icons.arrow_downward_outlined,
-                                          color: Colors.red,
-                                          size: 14,
-                                        ),
+                                        ((totalThisMonth - totalLastMonth) /
+                                                    totalLastMonth) >
+                                                0
+                                            ? const Icon(
+                                                Icons.arrow_upward_outlined,
+                                                color: Colors.blue,
+                                                size: 14,
+                                              )
+                                            : const Icon(
+                                                Icons.arrow_downward_outlined,
+                                                color: Colors.red,
+                                                size: 14,
+                                              ),
                                         Text(
-                                         '0',
+                                          '0',
                                           style: textSemiBold,
                                         ),
                                       ],
@@ -250,20 +257,19 @@ int customersPerMonth(var month){
                                 ),
                               ),
                             ),
-                             totalThisMonth>0?
-                             
-                            Text(
-                              "NEW ACHIEVMENT",
-                              style: textBold2,
-                            ): Text(
-                              "NO",
-                              style: textBold3,
-                            ),
+                            totalThisMonth > 0
+                                ? Text(
+                                    "NEW ACHIEVMENT",
+                                    style: textBold2,
+                                  )
+                                : Text(
+                                    "NO",
+                                    style: textBold3,
+                                  ),
                             Text(
                               "PROFIT !!",
                               style: textBold3,
                             ),
-                             
                           ],
                         ),
                       ),
@@ -277,7 +283,6 @@ int customersPerMonth(var month){
                     ],
                   ),
                 ),
-
                 Container(
                   width: double.infinity,
                   height: 6,
@@ -291,20 +296,19 @@ int customersPerMonth(var month){
                         text: TextSpan(
                             text: "Key metrics",
                             style: GoogleFonts.montserrat().copyWith(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18,
-                                color: const Color(0xFF4F3A57),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18,
+                              color: const Color(0xFF4F3A57),
                             ),
                             children: const <TextSpan>[
                               TextSpan(
                                   text: " this month",
-                                  style: TextStyle(fontWeight: FontWeight.bold)
-                              )
-                            ]
-                        ),
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ]),
                       ),
-
-                      const SizedBox(height: 20,),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Row(
                         children: [
                           CardCustom(
@@ -312,22 +316,21 @@ int customersPerMonth(var month){
                             height: 100,
                             mLeft: 0,
                             mRight: 3,
-                            child:  ListTileCustom(
-
-                              bgColor:Color(0xFFF7E3FF),
-                              //pathIcon: ".assets/icons/line.svg",
-                              pathIcon:"I1.png",
-                              title: "Profit Against Last Month",
-                              subTitle:'Rs '+(totalThisMonth-totalLastMonth).toString()
-                              
-                            ),
+                            child: ListTileCustom(
+                                bgColor: Color(0xFFF7E3FF),
+                                //pathIcon: ".assets/icons/line.svg",
+                                pathIcon: "I1.png",
+                                title: "Profit Against Last Month",
+                                subTitle: 'Rs ' +
+                                    (totalThisMonth - totalLastMonth)
+                                        .toString()),
                           ),
                           CardCustom(
                             width: size.width / 2 - 23,
-                            height:100,
+                            height: 100,
                             mLeft: 3,
                             mRight: 0,
-                            child:  ListTileCustom(
+                            child: ListTileCustom(
                               bgColor: Colors.lightGreenAccent,
                               pathIcon: "salary-svgrepo-com.svg",
                               title: "Monthly Income",
@@ -343,11 +346,13 @@ int customersPerMonth(var month){
                             height: 88.9,
                             mLeft: 0,
                             mRight: 3,
-                            child:  ListTileCustom(
+                            child: ListTileCustom(
                               bgColor: Color(0xFFFFF7DF),
                               pathIcon: "starts.svg",
                               title: "Reviews",
-                              subTitle:newReviewsInMonth()[0].toString()+'/'+newReviewsInMonth()[1].toString(),
+                              subTitle: newReviewsInMonth()[0].toString() +
+                                  '/' +
+                                  newReviewsInMonth()[1].toString(),
                             ),
                           ),
                           CardCustom(
@@ -359,7 +364,8 @@ int customersPerMonth(var month){
                               bgColor: Color(0xFFDEF7FF),
                               pathIcon: "eyes.svg",
                               title: "Total Customers",
-                              subTitle:customersPerMonth(currentMonth).toString(),
+                              subTitle:
+                                  customersPerMonth(currentMonth).toString(),
                             ),
                           ),
                         ],
@@ -372,98 +378,106 @@ int customersPerMonth(var month){
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 10.71,
-                                      height: 10.71,
-                                      decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color(0xFF0B45DC)
+                              Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 10.71,
+                                        height: 10.71,
+                                        decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color(0xFF0B45DC)),
                                       ),
-                                    ),
-                                     Padding(
-
-                                      padding: EdgeInsets.only(right: 5),
-                                      child: Text(" Peak Point: "+(totalLastMonth<totalThisMonth?totalThisMonth.toString():totalLastMonth.toString()),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.black
-                                       ),
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 5),
+                                        child: Text(
+                                          " Peak Point: " +
+                                              (totalLastMonth < totalThisMonth
+                                                  ? totalThisMonth.toString()
+                                                  : totalLastMonth.toString()),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                              color: Colors.black),
+                                        ),
                                       ),
-                                    ),
 
-                                    // const SizedBox(
-                                    //   width: 6,
-                                    // ),
-                                    // Text("Earnings",
-                                    //   style: label,
-                                    // ),
-                                    // const SizedBox(
-                                    //   width: 12,
-                                    // ),
-                                    // Container(
-                                    //   width: 9.71,
-                                    //   height: 9.71,
-                                    //   decoration: const BoxDecoration(
-                                    //       shape: BoxShape.circle,
-                                    //       color: Colors.teal
-                                    //   ),
-                                    // ),
-                                    // const SizedBox(
-                                    //   width: 6,
-                                    // ),
-                                    // Text("Profit Rate",
-                                    //   style: label,
-                                    // ),
-                                    // const SizedBox(
-                                    //   width: 12,
-                                    // ),
-                                    // Container(
-                                    //   width: 9.71,
-                                    //   height: 9.71,
-                                    //   decoration: BoxDecoration(
-                                    //       shape: BoxShape.circle,
-                                    //       color: red
-                                    //   ),
-                                    // ),
-                                    // const SizedBox(
-                                    //   width: 6,
-                                    // ),
-                                    // Text("Peak Points",
-                                    //   style: label,
-                                    // ),
+                                      // const SizedBox(
+                                      //   width: 6,
+                                      // ),
+                                      // Text("Earnings",
+                                      //   style: label,
+                                      // ),
+                                      // const SizedBox(
+                                      //   width: 12,
+                                      // ),
+                                      // Container(
+                                      //   width: 9.71,
+                                      //   height: 9.71,
+                                      //   decoration: const BoxDecoration(
+                                      //       shape: BoxShape.circle,
+                                      //       color: Colors.teal
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(
+                                      //   width: 6,
+                                      // ),
+                                      // Text("Profit Rate",
+                                      //   style: label,
+                                      // ),
+                                      // const SizedBox(
+                                      //   width: 12,
+                                      // ),
+                                      // Container(
+                                      //   width: 9.71,
+                                      //   height: 9.71,
+                                      //   decoration: BoxDecoration(
+                                      //       shape: BoxShape.circle,
+                                      //       color: red
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(
+                                      //   width: 6,
+                                      // ),
+                                      // Text("Peak Points",
+                                      //   style: label,
+                                      // ),
 
-
-                                    // const SizedBox(
-                                    //   width: 12,
-                                    // ),
-                                  ],
-                                )
-                              ),
+                                      // const SizedBox(
+                                      //   width: 12,
+                                      // ),
+                                    ],
+                                  )),
                               Container(
-                                padding: const EdgeInsets.all(2),
-                                width: double.infinity,
-                                height: 300,
-                                //color: Colors.blue,
-                                child:
-                                totalIncomePerMonth(currentMonth, currentYear)>0?
-                                LineChart(
-                                  LineChartData( 
-                                      borderData: FlBorderData(show: false),
-                                      lineBarsData: [
-                                       LineChartBarData(spots: [
-                                         //DATA
-                                          FlSpot(1, double.parse(totalThisMonth.toString())),
-                                          FlSpot(0, double.parse(totalLastMonth.toString())),
-                                        
-                                      ]
-                                       ),
-                                  ]),
-                                ):Container()
-                              ),
+                                  padding: const EdgeInsets.all(2),
+                                  width: double.infinity,
+                                  height: 300,
+                                  //color: Colors.blue,
+                                  child: totalIncomePerMonth(
+                                              currentMonth, currentYear) >
+                                          0
+                                      ? LineChart(
+                                          LineChartData(
+                                              borderData:
+                                                  FlBorderData(show: false),
+                                              lineBarsData: [
+                                                LineChartBarData(spots: [
+                                                  //DATA
+                                                  FlSpot(
+                                                      1,
+                                                      double.parse(
+                                                          totalThisMonth
+                                                              .toString())),
+                                                  FlSpot(
+                                                      0,
+                                                      double.parse(
+                                                          totalLastMonth
+                                                              .toString())),
+                                                ]),
+                                              ]),
+                                        )
+                                      : Container()),
 
                               // Container(
                               //   width: size.width - 40,
@@ -538,39 +552,32 @@ int customersPerMonth(var month){
                               //
                               //   ),
                               // )
-
                             ],
-                          )
-                      ),
+                          )),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-
-
         ),
       ),
-
     );
   }
-
-
 }
 
-class CardCustom extends StatelessWidget{
+class CardCustom extends StatelessWidget {
   final double mLeft, mRight, width, height;
   final Widget child;
 
-  const CardCustom({
-    Key? key,
-    required this.mLeft,
-    required this.mRight,
-    required this.width,
-    required this.height,
-    required this.child
-  }) : super(key: key);
+  const CardCustom(
+      {Key? key,
+      required this.mLeft,
+      required this.mRight,
+      required this.width,
+      required this.height,
+      required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -583,11 +590,11 @@ class CardCustom extends StatelessWidget{
       height: height,
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius:  BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               color: const Color(0xFFA3014F).withOpacity(0.05),
-              offset: const Offset(0,9),
+              offset: const Offset(0, 9),
               blurRadius: 30,
               spreadRadius: 0,
             ),
@@ -595,15 +602,13 @@ class CardCustom extends StatelessWidget{
                 color: const Color(0xFFB2036C).withOpacity(0.03),
                 offset: const Offset(0, 2),
                 blurRadius: 10,
-                spreadRadius: 0
-            )
-          ]
-      ),
+                spreadRadius: 0)
+          ]),
       child: child,
     );
   }
-
 }
+
 class CircleProgress extends CustomPainter {
   double progress;
   CircleProgress(this.progress);
@@ -621,27 +626,26 @@ class CircleProgress extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    Offset center = Offset(size.width/2 , size.height/2);
-    double radius = min(size.width/2, size.height/2 )-7;
+    Offset center = Offset(size.width / 2, size.height / 2);
+    double radius = min(size.width / 2, size.height / 2) - 7;
 
     canvas.drawCircle(center, radius, outerCircle);
-    double angle = 2 * pi * ( progress);
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi/2, angle, false, completeArc);
-
-
+    double angle = 2 * pi * (progress);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2,
+        angle, false, completeArc);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-
 }
+
 class ListTileCustom extends StatelessWidget {
   final Color bgColor;
   final String pathIcon, title, subTitle;
   const ListTileCustom({
     Key? key,
     required this.bgColor,
-    required this.pathIcon, 
+    required this.pathIcon,
     required this.title,
     required this.subTitle,
   }) : super(key: key);
@@ -661,12 +665,13 @@ class ListTileCustom extends StatelessWidget {
         //   height: 10.94,
         //   fit: BoxFit.scaleDown,
         // ),
-
       ),
-      title: Text(title,
+      title: Text(
+        title,
         style: textBold2,
       ),
-      subtitle: Text(subTitle,
+      subtitle: Text(
+        subTitle,
         style: textBold,
       ),
     );
