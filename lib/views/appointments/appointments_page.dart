@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:servicr_sp/local.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../constants.dart';
@@ -11,57 +16,169 @@ class AppointmentsPage extends StatefulWidget {
 }
 
 class _AppointmentsPageState extends State<AppointmentsPage> {
+  List appointments = [];
+  List notifications = [];
+
+  GetAppointmentsForSP() async {
+    var response = await Dio().get("$apiUrl/appointments");
+    // print(response.data);
+    Map<String, dynamic> responseJSON = await json.decode(response.toString());
+
+    setState(() {
+      appointments = responseJSON['data'];
+    });
+
+    appointments.forEach((element) {
+      if (element['serviceProvider'] == null) {
+      } else {
+        (element['serviceProvider']['serviceProviderID'] == uid &&
+                element['serviceisAcceptedStatus'] == true)
+            ? {notifications.add(element), print(element)}
+            : '';
+      }
+    });
+    print("n:  " + notifications.toString());
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    GetAppointmentsForSP();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Appointments"),
-      ),
-      body: Container(
-          child:SingleChildScrollView(
-           child: Column(
-            children: [
-              const SizedBox(height: 20,),
-              SafeArea(
-                child: TableCalendar(
-                  firstDay: DateTime.utc(2010,10,20),
-                  lastDay: DateTime.utc(2040,10,20),
-                  focusedDay: DateTime.now(),
-                 // headerVisible: false,
-                  //daysOfWeekVisible: false,
-                 // shouldFillViewport: true,
-                 // sixWeekMonthsEnforced: true,
-                  headerStyle: const HeaderStyle(
-                      titleTextStyle: TextStyle
-                        (
-                          fontSize: 20,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.w800,
-                      )
-                  ),
-                  calendarStyle: const CalendarStyle
-                    (
-                      // weekendTextStyle: TextStyle(fontSize: 20,
-                       //color: Colors.white,
-                      //     fontWeight: FontWeight.w600) ,
-                      todayTextStyle: TextStyle
-                       (
-                         fontSize: 20,
-                         color: Colors.white,
-                         fontWeight: FontWeight.w600
-                       )
-                     ),
-                   ),
-
-              ),
-            ],
-           ),
-          ),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Appointments"),
         ),
-    );
+        body: SingleChildScrollView(
+            child: SizedBox(
+          height: 800,
+          width: 800,
+          child: SfCalendar(
+            // backgroundColor: Color(0xFF021E4B),
+            cellBorderColor: Color(0xFF0D67F6),
+            view: CalendarView.month,
+            dataSource: MeetingDataSource(_getDataSource()),
+            monthViewSettings: const MonthViewSettings(
+                showAgenda: true,
+                appointmentDisplayMode:
+                    MonthAppointmentDisplayMode.appointment),
+            //monthViewSettings: MonthViewSettings(showAgenda: true),
+          ),
+        )));
+  }
+
+  List<Meeting> _getDataSource() {
+    final List<Meeting> meetings = <Meeting>[];
+    final DateTime today = DateTime.now();
+    final DateTime startTime =
+        DateTime(today.year, today.month, today.day, 9, 0, 0);
+    final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+    appointments.forEach((element) {
+      setState(() {
+        meetings.add(Meeting(
+            'Repair pipes                                                     \Rs.2000 Per Hr',
+            DateTime.parse(element['date']),
+            DateTime.parse(element['date']),
+            const Color(0xFF658972),
+            false));
+      });
+    });
+
+    return meetings;
   }
 }
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments![index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments![index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments![index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments![index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments![index].isAllDay;
+  }
+}
+
+class Meeting {
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+}
+
+
+//           child:SingleChildScrollView(
+//            child: Column(
+//             children: [
+//               const SizedBox(height: 20,),
+//               SafeArea(
+//                 child: TableCalendar(
+//                   firstDay: DateTime.utc(2010,10,20),
+//                   lastDay: DateTime.utc(2040,10,20),
+//                   focusedDay: DateTime.now(),
+//                  // headerVisible: false,
+//                   //daysOfWeekVisible: false,
+//                  // shouldFillViewport: true,
+//                  // sixWeekMonthsEnforced: true,
+//                   headerStyle: const HeaderStyle(
+//                       titleTextStyle: TextStyle
+//                         (
+//                           fontSize: 20,
+//                           color: Colors.blue,
+//                           fontWeight: FontWeight.w800,
+//                       )
+//                   ),
+//                   calendarStyle: const CalendarStyle
+//                     (
+//                       // weekendTextStyle: TextStyle(fontSize: 20,
+//                        //color: Colors.white,
+//                       //     fontWeight: FontWeight.w600) ,
+//                       todayTextStyle: TextStyle
+//                        (
+//                          fontSize: 20,
+//                          color: Colors.white,
+//                          fontWeight: FontWeight.w600
+//                        )
+//                      ),
+//                    ),
+
+//               ),
+//             ],
+//            ),
+//           ),
+//         ),
+//     );
+//   }
+// }
 
 // void main() {
 //   runApp( MyApp());

@@ -24,7 +24,7 @@ class WelcomePage extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Find service professionals near you for all your needs!',
+                'Provide home services and earn money!',
                 style: TextStyle(fontSize: 24.0),
               ),
               SizedBox(
@@ -37,40 +37,6 @@ class WelcomePage extends StatelessWidget {
               SizedBox(
                 height: 24.0,
               ),
-              // Text(
-              //   "Login or Register",
-              //   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-              // ),
-              // SizedBox(
-              //   height: 16.0,
-              // ),
-              // Container(
-              //   child: TextField(
-              //     keyboardType: TextInputType.numberWithOptions(),
-              //     decoration: InputDecoration(
-              //         labelText: "Mobile Number",
-              //         enabledBorder: OutlineInputBorder()),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 16.0,
-              // ),
-              // ElevatedButton(
-              //   child: Text('Continue'),
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => LandingPage(),
-              //       ),
-              //     );
-              //   },
-              //   style: ElevatedButton.styleFrom(
-              //     minimumSize: const Size.fromHeight(50),
-
-              //     //   primary: Colors.black,
-              //   ),
-              // ),
               ElevatedButton(
                 child: Text('Log in'),
                 onPressed: () {
