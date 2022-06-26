@@ -24,14 +24,14 @@ class WelcomePage extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Find service professionals near you for all your needs!',
+                'Provide home services and earn money!',
                 style: TextStyle(fontSize: 24.0),
               ),
               SizedBox(
                 height: 24,
               ),
               Image.asset(
-                './assets/images/sp_welcome.png',
+                './assets/images/sp_welcome.jpg',
                 width: 400,
               ),
               SizedBox(
