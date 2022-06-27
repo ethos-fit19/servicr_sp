@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:servicr_client/views/utils/aboutUI.dart';
+// import 'package:servicr_sp/views/utils/aboutUI.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
 //import 'package:info/aboutUI.dart';

@@ -1,4 +1,16 @@
-import 'package:flutter/material.dart' show AppBarTheme, BuildContext, Colors, ElevatedButton, ElevatedButtonThemeData, IconThemeData, Key, StatelessWidget, ThemeData, Widget, runApp;
+import 'package:flutter/material.dart'
+    show
+        AppBarTheme,
+        BuildContext,
+        Colors,
+        ElevatedButton,
+        ElevatedButtonThemeData,
+        IconThemeData,
+        Key,
+        StatelessWidget,
+        ThemeData,
+        Widget,
+        runApp;
 import 'package:get/get.dart';
 import 'package:servicr_sp/views/welcome/welcome.dart';
 import 'package:servicr_sp/constants.dart';
@@ -17,14 +29,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           fontFamily: 'LS',
           primaryColor: AppColor.s_blue,
-          // inputDecorationTheme: const InputDecorationTheme(
-          //   enabledBorder: OutlineInputBorder(
-          //     borderSide: BorderSide(width: 2, color: Colors.black),
-          //   ),
-          //   focusedBorder: OutlineInputBorder(
-          //     borderSide: BorderSide(width: 2, color: Colors.black),
-          //   ),
-          // ),
           iconTheme: IconThemeData(color: AppColor.s_blue),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
@@ -40,5 +44,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

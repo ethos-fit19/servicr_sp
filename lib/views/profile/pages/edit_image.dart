@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 //import 'package:flutter_user_profile/widgets/appbar_widget.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:servicr_client/views/profile/user/user_data.dart';
-// import 'package:servicr_client/views/profile/widgets/appbar_widget.dart';
+// import 'package:servicr_sp/views/profile/user/user_data.dart';
+// import 'package:servicr_sp/views/profile/widgets/appbar_widget.dart';
 import 'package:servicr_sp/views/profile/user/user_data.dart';
 import 'package:servicr_sp/views/profile/widgets/appbar_widget.dart';
 

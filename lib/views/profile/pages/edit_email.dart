@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-// import 'package:servicr_client/views/profile/user/user_data.dart';
-// import 'package:servicr_client/views/profile/widgets/appbar_widget.dart';
+// import 'package:servicr_sp/views/profile/user/user_data.dart';
+// import 'package:servicr_sp/views/profile/widgets/appbar_widget.dart';
 import 'package:servicr_sp/views/profile/user/user_data.dart';
 import 'package:servicr_sp/views/profile/widgets/appbar_widget.dart';
 
