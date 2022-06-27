@@ -1,12 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:servicr_sp/constants.dart';
-import 'package:servicr_sp/views/welcome/welcome.dart';
-import 'edit_profile.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:servicr_sp/views/profile/pages/edit_profile_page.dart';
+import 'package:servicr_sp/views/profile/utils/about_page.dart';
+import 'package:servicr_sp/views/profile/utils/help_page.dart';
+import 'package:servicr_sp/views/profile/utils/setting_page.dart';
+import '../../providers/currentuser_provider.dart';
+import '../../util/user_provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends HookWidget {
   Widget textfield({@required hintText}) {
     return Material(
       elevation: 4,
@@ -33,6 +38,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _currentUserProvider = useProvider(currentUserProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -40,101 +46,172 @@ class ProfilePage extends StatelessWidget {
           'Profile',
         ),
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+      body: Center(
+        child: Container(
+          child: ListView(
             children: [
               Container(
-                height: 500,
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(5.0),
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.width / 4,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          //image: NetworkImage(
+                          //     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+                          image: AssetImage('assets/images/propic.jpg'),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      _currentUserProvider.state.name!,
+                      // 'John smith',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      // 'johnsmith93@gmail.com',
+                      _currentUserProvider.state.email!,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      'Kandy',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 300,
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 18),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // ListTile(
-                    //   leading: Icon(Icons.settings),
-                    //   title: Text('SETTINGS'),
-                    // ),
-                    TextField(
-                      decoration: new InputDecoration(
-                        prefixIcon: new Icon(
-                          Icons.settings,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        labelText: "SETTINGS",
-                        suffixIcon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingPageUI()),
+                        );
+                      },
+                      child: TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.settings,
+                            color: Colors.blueGrey,
+                            size: 30,
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.blue),
+                          labelText: "Settings",
+                          suffixIcon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.blueGrey,
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
                         ),
                       ),
                     ),
-
-                    TextField(
-                      decoration: new InputDecoration(
-                        prefixIcon: new Icon(
-                          Icons.info_outline,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        labelText: "INFO",
-                        suffixIcon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AboutPageUI()),
+                        );
+                      },
+                      child: TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.info_outline,
+                            color: Colors.blueGrey,
+                            size: 30,
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.blue),
+                          labelText: "INFO",
+                          suffixIcon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.blueGrey,
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
                         ),
                       ),
                     ),
-
-                    TextField(
-                      decoration: new InputDecoration(
-                        prefixIcon: new Icon(
-                          Icons.help_outline_rounded,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        labelText: "HELP & SUPPORT",
-                        suffixIcon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HelpPageUI()),
+                        );
+                      },
+                      child: TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.help_outline_rounded,
+                            color: Colors.blueGrey,
+                            size: 30,
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.blue),
+                          labelText: "HELP & SUPPORT",
+                          suffixIcon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.blueGrey,
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
                         ),
                       ),
                     ),
-
                     TextField(
-                      decoration: new InputDecoration(
-                        prefixIcon: new Icon(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
                           Icons.share,
                           color: Colors.blueGrey,
                           size: 30,
@@ -146,7 +223,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                         enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                             color: Colors.blueAccent,
                           ),
                         ),
@@ -156,138 +233,47 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    // TextField(
-                    //   decoration: new InputDecoration(
-                    //     prefixIcon: new Icon(
-                    //       Icons.logout_rounded,
-                    //       color: Colors.blueGrey,
-                    //       size: 30,
-                    //     ),
-                    //     labelText: "LOGOUT",
-                    //     suffixIcon: Icon(
-                    //       Icons.arrow_forward_ios,
-                    //       color: Colors.blueGrey,
-                    //     ),
-                    //     enabledBorder: const OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    //       borderSide: const BorderSide(
-                    //         color: Colors.blueAccent,
-                    //       ),
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    //       borderSide: BorderSide(color: Colors.blue),
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // textfield(
-                    //    hintText: 'Settings',
-                    //   ),
-
-                    // textfield(
-                    //   hintText: 'Info',
-                    // ),
-                    // textfield(
-                    //   hintText: 'Help & Support',
-                    // ),
-                    // textfield(
-                    //   hintText: 'Share',
-                    // ),
-                    // textfield(
-                    //   hintText: 'Logout',
-                    // ),
-
-                    Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8)),
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          child: const Text('Edit Profile'),
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(50),
-                            // primary: Colors.black,
-                          ),
-                          onPressed: () => {Get.to(WelcomePage())},
-                        ))
                   ],
                 ),
-              )
-            ],
-          ),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                // child: Text(
-                //   "Profile",
-                //   style: TextStyle(
-                //     fontSize: 20,
-                //     letterSpacing: 1.5,
-                //     color: Colors.white,
-                //     fontWeight: FontWeight.w600,
-                //   ),
-                // ),
               ),
               Container(
-                padding: EdgeInsets.all(5.0),
-                width: MediaQuery.of(context).size.width / 4,
-                height: MediaQuery.of(context).size.width / 4,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 2),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://static1.bigstockphoto.com/9/1/3/large1500/319568026.jpg'),
-                    //AssetImage('images/profile.jpg')
+                margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    // primary: Colors.black,
                   ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfilePage()),
+                    )
+                  },
+                  child: const Text('Edit Profile'),
                 ),
               ),
-              Text(
-                'John smith',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              Text(
-                'johnsmith93@gmail.com',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
+              Container(
+                //padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
 
-              Text(
-                'Kandy',
-                style: TextStyle(
-                  fontSize: 16,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    // primary: Colors.black,
+                  ),
+                  onPressed: () {
+                    final obj = UserProvider();
+
+                    obj.logout(context);
+                  },
+                  child: const Text('Logout'),
                 ),
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
-
-// class HeaderCurvedContainer extends CustomPainter {
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     Paint paint = Paint()..color = Colors.blue.shade900;
-//     Path path = Path()
-//       ..relativeLineTo(0, 140)
-//       ..quadraticBezierTo(size.width / 2, 225, size.width, 140)
-//       ..relativeLineTo(0, -140)
-//       ..close();
-//     canvas.drawPath(path, paint);
-//   }
-
-//   @override
-//   bool shouldRepaint(CustomPainter oldDelegate) => false;
-// }

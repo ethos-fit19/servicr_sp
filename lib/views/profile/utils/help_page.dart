@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:servicr_sp/views/profile/profile_page.dart';
 // import 'package:servicr_sp/views/utils/aboutUI.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
@@ -31,7 +32,13 @@ class _HelpPageUIState extends State<HelpPageUI> {
               fontSize: 22,
             )),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {  
+             Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()),
+                        );
+          },
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,

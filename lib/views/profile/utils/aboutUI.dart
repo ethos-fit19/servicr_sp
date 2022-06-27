@@ -2,6 +2,7 @@
 
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:servicr_sp/views/profile/profile_page.dart';
 
 class aboutUI extends StatelessWidget {
   @override
@@ -56,7 +57,16 @@ class aboutUI extends StatelessWidget {
           )),
         ),
         ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {  
+            
+         Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()),
+                        );
+
+          
+          },
           icon: Icon(
             Icons.mail,
             color: Colors.white,

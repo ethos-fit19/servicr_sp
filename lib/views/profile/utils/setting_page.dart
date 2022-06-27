@@ -1,6 +1,8 @@
 //import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:servicr_sp/views/login/login_page.dart';
+import 'package:servicr_sp/views/profile/profile_page.dart';
 
 class SettingPageUI extends StatefulWidget {
   @override
@@ -39,7 +41,13 @@ class _SettingPageUIState extends State<SettingPageUI> {
               fontSize: 22,
             )),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {  
+             Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()),
+                        );
+          },
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
@@ -95,9 +103,15 @@ class _SettingPageUIState extends State<SettingPageUI> {
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20))),
-                onPressed: () {},
+                onPressed: () {  
+                   Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
+                },
                 child: Text(
-                  " SIGN OUT",
+                  " SIGN out",
                   style: TextStyle(
                       fontSize: 16, letterSpacing: 2.2, color: Colors.black),
                 ),
