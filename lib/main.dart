@@ -1,22 +1,11 @@
-import 'package:flutter/material.dart'
-    show
-        AppBarTheme,
-        BuildContext,
-        Colors,
-        ElevatedButton,
-        ElevatedButtonThemeData,
-        IconThemeData,
-        Key,
-        StatelessWidget,
-        ThemeData,
-        Widget,
-        runApp;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:servicr_sp/views/welcome/welcome.dart';
 import 'package:servicr_sp/constants.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

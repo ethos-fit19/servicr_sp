@@ -18,21 +18,25 @@ class AppointmentsPage extends StatefulWidget {
 class _AppointmentsPageState extends State<AppointmentsPage> {
   List appointments = [];
   List notifications = [];
+  String sid = '';
+
+  setSID() async {
+    await GetAppointmentsForSP();
+  }
 
   GetAppointmentsForSP() async {
     var response = await Dio().get("$apiUrl/appointments");
     // print(response.data);
     Map<String, dynamic> responseJSON = await json.decode(response.toString());
 
-    setState(() {
-      appointments = responseJSON['data'];
-    });
+    appointments = responseJSON['data'];
 
     appointments.forEach((element) {
+      // print("ele " + element.toString());
       if (element['serviceProvider'] == null) {
       } else {
-        (element['serviceProvider']['serviceProviderID'] == uid &&
-                element['serviceisAcceptedStatus'] == true)
+        ((element['serviceProvider']['serviceProviderID'] == uid) &
+                (element['serviceisAcceptedStatus'] == true))
             ? {notifications.add(element), print(element)}
             : '';
       }
@@ -44,7 +48,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    GetAppointmentsForSP();
+
+    setSID();
   }
 
   @override
@@ -53,6 +58,13 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text("Appointments"),
+          actions: [
+            GestureDetector(
+                onTap: () {
+                  setState(() {});
+                },
+                child: const Icon(Icons.refresh))
+          ],
         ),
         body: SingleChildScrollView(
             child: SizedBox(
@@ -79,15 +91,15 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
         DateTime(today.year, today.month, today.day, 9, 0, 0);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
 
-    appointments.forEach((element) {
-      setState(() {
-        meetings.add(Meeting(
-            'Repair pipes                                                     \Rs.2000 Per Hr',
-            DateTime.parse(element['date']),
-            DateTime.parse(element['date']),
-            const Color(0xFF658972),
-            false));
-      });
+    notifications.forEach((element) {
+      meetings.add(Meeting(
+          element['serviceCategory'] != null
+              ? element['serviceCategory']['name']
+              : 'Service',
+          DateTime.parse(element['date']),
+          DateTime.parse(element['date']),
+          const Color(0xFF658972),
+          false));
     });
 
     return meetings;

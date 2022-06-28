@@ -17,6 +17,8 @@ class _LandingPageState extends State<LandingPage> {
   int currentIndex = 0;
   List<Widget> pages = [
     HomePage(),
+    // Container(),
+
     AppointmentsPage(),
     NotificationsPage(),
     ProfilePage()

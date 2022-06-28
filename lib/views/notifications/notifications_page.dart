@@ -21,10 +21,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     var response = await Dio().get("$apiUrl/appointments");
     // print(response.data);
     Map<String, dynamic> responseJSON = await json.decode(response.toString());
-
-    setState(() {
-      appointments = responseJSON['data'];
-    });
+    appointments = responseJSON['data'];
 
     appointments.forEach((element) {
       if (element['serviceProvider'] == null) {
@@ -51,6 +48,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("Notifications"),
+        actions: [
+          GestureDetector(
+              onTap: () {
+                setState(() {});
+              },
+              child: const Icon(Icons.refresh))
+        ],
       ),
       body: listView(notifications, context),
     );
