@@ -7,6 +7,7 @@ import 'package:servicr_sp/views/profile/pages/edit_location.dart';
 import 'package:servicr_sp/views/profile/pages/edit_name.dart';
 import 'package:servicr_sp/views/profile/pages/edit_other.dart';
 import 'package:servicr_sp/views/profile/pages/edit_phone.dart';
+import 'package:servicr_sp/views/profile/profile_page.dart';
 import '../user/user.dart';
 import '../widgets/display_image_widget.dart';
 import '../user/user_data.dart';
@@ -33,7 +34,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             ),
             leading: IconButton(
-              onPressed: () {},
+              onPressed: () {  
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.white,
