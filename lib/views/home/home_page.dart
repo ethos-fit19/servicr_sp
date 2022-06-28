@@ -325,7 +325,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         height: 180,
                         decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage("./assets/images/427.jpg"))),
+                                image: AssetImage("assets/images/427.jpg"))),
                       )
                     ],
                   ),

@@ -17,7 +17,7 @@ class WelcomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Image.asset(
-                './assets/images/servicr_logo.png',
+                'assets/images/servicr_logo.png',
                 width: 180.0,
               ),
               SizedBox(
@@ -31,7 +31,7 @@ class WelcomePage extends StatelessWidget {
                 height: 24,
               ),
               Image.asset(
-                './assets/images/sp_welcome.jpg',
+                'assets/images/sp_welcome.jpg',
                 width: 400,
               ),
               SizedBox(
