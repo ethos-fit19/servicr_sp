@@ -68,9 +68,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   int totalThisMonth = 0;
   int totalLastMonth = 0;
+  double percentage =0.0;
   bool isLoading = true;
 
-  Future getSPidByyUserId(uid) async {
+  getSPidByyUserId(uid) async {
     var response = await Dio().get(apiUrl + '/serviceProvider');
     Map<String, dynamic> responseJSON = await json.decode(response.toString());
     List sp = responseJSON['data'];
@@ -80,20 +81,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ? {sid = element['_id'].toString()}
           : '';
     }
+    GetAppointmentsOfSP(sid);
   }
 
-  setSID() async {
-    await getSPidByyUserId(uid);
-
-    await GetAppointmentsOfSP(sid);
-  }
-
-  Future GetAppointmentsOfSP(sid) async {
+   GetAppointmentsOfSP(sid) async {
     print("URL:  " + apiUrl + '/appointments/servicer/' + sid);
     var res = await Dio().get(apiUrl + '/appointments/servicer/' + sid);
     Map<String, dynamic> responseJSON = await json.decode(res.toString());
 
-    appointments = responseJSON['data'];
+   
+     appointments = responseJSON['data'];
+
     for (var element in appointments) {
       {
         element['serviceisAcceptedStatus'] == true
@@ -105,30 +103,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     await customersPerMonth(currentMonth);
     await totalIncomeThisMonthNew(currentMonth);
+    List last =getLastMonth(currentMonth, currentYear);
+     totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
+    percentage = await percentageThisMonth();
+
     print('Accepted' + acceptedAppointments.toString());
     print(totalThisMonth.toString());
+    print(totalLastMonth.toString());
     print(totalCustomersPerMonth.toString());
+    print(percentage);
     isLoading = false;
-    return;
-    //totalThisMonth = totalIncomePerMonth(currentMonth, currentYear);
+    setState(() => {})  ;  //totalThisMonth = totalIncomePerMonth(currentMonth, currentYear);
     // totalLastMonth = ();
   }
 
-  // int totalIncomePerMonth(var month, var yr) {
-  //   int total = 0;
-  //   print('month $month yr $yr');
-  //   acceptedAppointments.forEach((element) {
-  //     String mon = element['date'].toString().substring(5, 7);
-  //     String year = element['date'].toString().substring(0, 4);
-  //     print(element['price']);
-  //     (int.parse(mon) == int.parse(month) && int.parse(yr) == int.parse(year))
-  //         ? total += element['price'] as int
-  //         : 0;
-  //   });
-  //   print('total $total');
+  int totalIncomePerMonth(var month, var yr) {
+    int total = 0;
+    print('month $month yr $yr');
+    acceptedAppointments.forEach((element) {
+      String mon = element['date'].toString().substring(5, 7);
+      String year = element['date'].toString().substring(0, 4);
+      print(element['price']);
+      (int.parse(mon) == int.parse(month) && int.parse(yr) == int.parse(year))
+          ? total += element['price'] as int
+          : 0;
+    });
+    print('total $total');
 
-  //   return total;
-  // }
+    return total;
+  }
 
   totalIncomeThisMonthNew(var month) {
     int total = thisMonthAppointments.fold(0, (i, el) {
@@ -137,14 +140,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     totalThisMonth = total;
   }
 
-  // int lastMonthIncome() {
-  //   int lastMonth = (currentMonth == '1') ? 12 : (int.parse(currentMonth) - 1);
-  //   int year = currentMonth == '1'
-  //       ? int.parse(currentYear) - 1
-  //       : int.parse(currentYear);
+List getLastMonth(String M,String Y) {
+    int lastMonth = (M == '1') ? 12 : (int.parse(M) - 1);
+    int year = M == '1'
+        ? int.parse(Y) - 1
+        : int.parse(Y);
+return [lastMonth.toString(),year.toString()];
+    
+  }
 
-  //   return totalIncomePerMonth(lastMonth.toString(), year.toString());
-  // }
+
 
   customersPerMonth(var month) {
     int customers = 0;
@@ -157,6 +162,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ? {customers += 1, thisMonthAppointments.add(element)}
           : 0;
     }
+
 
     totalCustomersPerMonth = customers;
   }
@@ -188,15 +194,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  percentage() {
-    return (((totalThisMonth - totalLastMonth) / totalLastMonth) * 100)
+  percentageThisMonth() {
+    if(totalLastMonth>0){
+      return((totalThisMonth-totalLastMonth)/totalLastMonth)*100;
+    }
+    else{
+      return(99.5)
         .roundToDouble();
+    }
+    
   }
 
   @override
   void initState() {
     super.initState();
-    setSID();
+    getSPidByyUserId(uid);
 
     getReviews();
   }
@@ -258,8 +270,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             CustomPaint(
                               foregroundPainter: CircleProgress(
-                                  ((totalThisMonth - totalLastMonth) /
-                                      totalLastMonth)),
+                                  (percentage/100)),
                               child: SizedBox(
                                 width: 107,
                                 height: 107,
@@ -281,9 +292,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        ((totalThisMonth - totalLastMonth) /
-                                                    totalLastMonth) >
-                                                0
+                                        (totalThisMonth >
+                                                    totalLastMonth) 
+                                                
                                             ? const Icon(
                                                 Icons.arrow_upward_outlined,
                                                 color: Colors.blue,
@@ -295,7 +306,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 size: 14,
                                               ),
                                         Text(
-                                          '0',
+                                          percentage.toStringAsFixed(1)+' %',
                                           style: textSemiBold,
                                         ),
                                       ],
@@ -367,7 +378,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 bgColor: Color(0xFFF7E3FF),
                                 //pathIcon: ".assets/icons/line.svg",
                                 pathIcon: "I1.png",
-                                title: "Profit Against Last Month",
+                                title: "Gained more",
                                 subTitle: 'Rs ' +
                                     (totalThisMonth - totalLastMonth)
                                         .toString()),
@@ -508,8 +519,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               lineBarsData: [
                                                 LineChartBarData(spots: [
                                                   //DATA
-                                                  FlSpot(1, 1000.0),
-                                                  FlSpot(0, 2000.0),
+                                                  FlSpot(0,totalLastMonth.toDouble()),
+                                                  FlSpot(1, totalThisMonth.toDouble()),
                                                 ]),
                                               ]),
                                         )
