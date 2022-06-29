@@ -210,44 +210,44 @@ class ProfilePage extends HookWidget {
                       ),
                     ),
 
-                     InkWell(
-                       onTap:() async {
+                    InkWell(
+                      onTap: () async {
                         await FlutterShare.share(
                             title: "Servicr",
-                            text: "Servicr - Your all home demand servicers connecting place",
+                            text:
+                                "Servicr - Your all home demand servicers connecting place",
                             linkUrl:
                                 "https://pub.dev/packages/url_launcher#android");
                       },
-
-                    child:TextField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.share,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        labelText: "SHARE",
-                        suffixIcon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          borderSide: BorderSide(
-                            color: Colors.blueAccent,
+                      child: TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.share,
+                            color: Colors.blueGrey,
+                            size: 30,
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.blue),
+                          labelText: "SHARE",
+                          suffixIcon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.blueGrey,
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
                         ),
                       ),
                     ),
-                     ),
-
                   ],
-
                 ),
               ),
               Container(
