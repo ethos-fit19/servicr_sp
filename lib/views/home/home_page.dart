@@ -391,7 +391,7 @@ return [lastMonth.toString(),year.toString()];
                             mRight: 3,
                             child: ListTileCustom(
                               bgColor: Color(0xFFFFF7DF),
-                              pathIcon: "starts.svg",
+                              pathIcon: "r1.svg",
                               title: "Reviews",
                               subTitle: monthlyReviews.toString() +
                                   '/' +
