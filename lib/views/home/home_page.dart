@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:servicr_sp/providers/currentuser_provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -102,9 +103,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     print('accepted appo' + acceptedAppointments.length.toString());
 
     await customersPerMonth(currentMonth);
-    await totalIncomeThisMonthNew(currentMonth);
+    //await totalIncomeThisMonthNew(currentMonth);
+    totalThisMonth=await totalIncomePerMonth(currentMonth, currentYear);
     List last =getLastMonth(currentMonth, currentYear);
-     totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
+    totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
     percentage = await percentageThisMonth();
 
     print('Accepted' + acceptedAppointments.toString());
@@ -235,22 +237,6 @@ return [lastMonth.toString(),year.toString()];
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Center(
-              child: CircleAvatar(
-                maxRadius: 20,
-                backgroundImage: NetworkImage(
-                    "https://jooinn.com/images/man39s-face-11.jpg"),
-              ),
-            ),
-          )
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -376,8 +362,8 @@ return [lastMonth.toString(),year.toString()];
                             mRight: 3,
                             child: ListTileCustom(
                                 bgColor: Color(0xFFF7E3FF),
-                                //pathIcon: ".assets/icons/line.svg",
-                                pathIcon: "I1.png",
+                                //pathIcon: "assets/icons/l1.png",
+                               pathIcon: "increase.svg",
                                 title: "Gained more",
                                 subTitle: 'Rs ' +
                                     (totalThisMonth - totalLastMonth)
@@ -390,7 +376,7 @@ return [lastMonth.toString(),year.toString()];
                             mRight: 0,
                             child: ListTileCustom(
                               bgColor: Colors.lightGreenAccent,
-                              pathIcon: "salary-svgrepo-com.svg",
+                              pathIcon: "m2.svg",
                               title: "Monthly Income",
                               subTitle: 'Rs ${totalThisMonth}',
                             ),
@@ -406,7 +392,7 @@ return [lastMonth.toString(),year.toString()];
                             mRight: 3,
                             child: ListTileCustom(
                               bgColor: Color(0xFFFFF7DF),
-                              pathIcon: "starts.svg",
+                              pathIcon: "r1.svg",
                               title: "Reviews",
                               subTitle: monthlyReviews.toString() +
                                   '/' +
@@ -420,7 +406,7 @@ return [lastMonth.toString(),year.toString()];
                             mRight: 0,
                             child: ListTileCustom(
                               bgColor: Color(0xFFDEF7FF),
-                              pathIcon: "eyes.svg",
+                              pathIcon: "c1.svg",
                               title: "Total Customers",
                               subTitle: totalCustomersPerMonth.toString(),
                             ),
@@ -707,11 +693,11 @@ class ListTileCustom extends StatelessWidget {
           shape: BoxShape.circle,
           color: bgColor,
         ),
-        // child: SvgPicture.asset("assets/icons/"+pathIcon,
-        //   width: 21.88,
-        //   height: 10.94,
-        //   fit: BoxFit.scaleDown,
-        // ),
+        child: SvgPicture.asset("assets/icons/"+pathIcon,
+          width: 21.88,
+          height: 10.94,
+          fit: BoxFit.scaleDown,
+        ),
       ),
       title: Text(
         title,
