@@ -9,11 +9,11 @@ class UserData {
 
   static User myUser = User(
     image:
-"https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png",   
+        "https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png",
     name: 'John Philip',
     email: 'johnphilip89@gmail.com',
     phone: '+94256984320',
-    location: 'Kandy',
+    city: 'Kandy',
     other: '',
   );
 

@@ -6,6 +6,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:servicr_sp/views/profile/pages/edit_profile_page.dart';
+import 'package:servicr_sp/views/profile/user/user_data.dart';
 import 'package:servicr_sp/views/profile/utils/about_page.dart';
 import 'package:servicr_sp/views/profile/utils/help_page.dart';
 import 'package:servicr_sp/views/profile/utils/setting_page.dart';
@@ -40,6 +41,7 @@ class ProfilePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _currentUserProvider = useProvider(currentUserProvider);
+    final user = UserData.myUser;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -87,7 +89,7 @@ class ProfilePage extends HookWidget {
                       ),
                     ),
                     Text(
-                      'Kandy',
+                      user.city,
                       style: TextStyle(
                         fontSize: 16,
                       ),
