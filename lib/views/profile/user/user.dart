@@ -3,7 +3,7 @@ class User {
   String name;
   String email;
   String phone;
-  String location;
+  String city;
   String other;
 
   // Constructor
@@ -12,7 +12,7 @@ class User {
     required this.name,
     required this.email,
     required this.phone,
-    required this.location,
+    required this.city,
     required this.other,
   });
 
@@ -21,7 +21,7 @@ class User {
     String? name,
     String? phone,
     String? email,
-    String? where,
+    String? city,
     String? other,
   }) =>
       User(
@@ -29,7 +29,7 @@ class User {
         name: name ?? this.name,
         email: email ?? this.email,
         phone: phone ?? this.phone,
-        location: where ?? this.location,
+        city: city ?? this.city,
         other: other ?? this.other,
       );
 
@@ -37,7 +37,7 @@ class User {
         image: json['imagePath'],
         name: json['name'],
         email: json['email'],
-        location: json['where'],
+        city: json['city'],
         phone: json['phone'],
         other: json['other'],
       );
@@ -46,7 +46,7 @@ class User {
         'imagePath': image,
         'name': name,
         'email': email,
-        'where': location,
+        'city': city,
         'phone': phone,
         'other': other,
       };
