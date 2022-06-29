@@ -69,6 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   int totalThisMonth = 0;
   int totalLastMonth = 0;
+  int totalLastMonthBeforeLastMonth = 0;
   double percentage =0.0;
   bool isLoading = true;
 
@@ -107,6 +108,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     totalThisMonth=await totalIncomePerMonth(currentMonth, currentYear);
     List last =getLastMonth(currentMonth, currentYear);
     totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
+    
     percentage = await percentageThisMonth();
 
     print('Accepted' + acceptedAppointments.toString());

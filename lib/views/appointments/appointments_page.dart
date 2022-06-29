@@ -72,7 +72,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
           width: 800,
           child: SfCalendar(
             // backgroundColor: Color(0xFF021E4B),
-            cellBorderColor: Color.fromARGB(255, 10, 43, 95),
+            cellBorderColor: Color(0xFF0D67F6),
             view: CalendarView.month,
             dataSource: MeetingDataSource(_getDataSource()),
             monthViewSettings: const MonthViewSettings(
@@ -98,7 +98,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
               : 'Service',
           DateTime.parse(element['date']),
           DateTime.parse(element['date']),
-          Color.fromARGB(255, 6, 11, 110),
+          Color.fromARGB(255, 6, 10, 96),
           false));
     });
 
