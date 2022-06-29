@@ -154,7 +154,7 @@ class ProfilePage extends HookWidget {
                             color: Colors.blueGrey,
                             size: 30,
                           ),
-                          labelText: "INFO",
+                          labelText: "ABOUT US",
                           suffixIcon: Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.blueGrey,
