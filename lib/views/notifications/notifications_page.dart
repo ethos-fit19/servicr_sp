@@ -114,6 +114,7 @@ Row acceptButton(var ele, context) {
     element['id'] = id;
 
     element['serviceisAcceptedStatus'] = true;
+    // element['serviceAcceptedStatus'] = true;
 
     // Map<String, dynamic> data = {"ïd": id., "serviceisAcceptedStatus": true};
 

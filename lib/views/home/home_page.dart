@@ -397,9 +397,9 @@ return [lastMonth.toString(),year.toString()];
                               bgColor: Color(0xFFFFF7DF),
                               pathIcon: "r1.svg",
                               title: "Reviews",
-                              subTitle: monthlyReviews.toString() +
+                              subTitle: totalReviews.toString() +
                                   '/' +
-                                  totalReviews.toString(),
+                                  totalCustomersPerMonth.toString(),
                             ),
                           ),
                           CardCustom(
