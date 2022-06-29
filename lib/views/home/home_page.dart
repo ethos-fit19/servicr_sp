@@ -106,7 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     //await totalIncomeThisMonthNew(currentMonth);
     totalThisMonth=await totalIncomePerMonth(currentMonth, currentYear);
     List last =getLastMonth(currentMonth, currentYear);
-     totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
+    totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
     percentage = await percentageThisMonth();
 
     print('Accepted' + acceptedAppointments.toString());
