@@ -108,7 +108,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     totalThisMonth=await totalIncomePerMonth(currentMonth, currentYear);
     List last =getLastMonth(currentMonth, currentYear);
     totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
-    
+    List monthBeforeLast =getLastMonth(last[0],last[1]);
+    totalLastMonthBeforeLastMonth =await totalIncomePerMonth(monthBeforeLast[0],monthBeforeLast[1]);
     percentage = await percentageThisMonth();
 
     print('Accepted' + acceptedAppointments.toString());
@@ -507,8 +508,9 @@ return [lastMonth.toString(),year.toString()];
                                               lineBarsData: [
                                                 LineChartBarData(spots: [
                                                   //DATA
-                                                  FlSpot(0,totalLastMonth.toDouble()),
-                                                  FlSpot(1, totalThisMonth.toDouble()),
+                                                  FlSpot(0,totalLastMonthBeforeLastMonth.toDouble()),
+                                                  FlSpot(1, totalLastMonth.toDouble()),
+                                                  FlSpot(2, totalThisMonth.toDouble()),
                                                 ]),
                                               ]),
                                         )
