@@ -3,6 +3,7 @@
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:servicr_sp/views/profile/profile_page.dart';
+import 'package:servicr_sp/views/profile/utils/help_page.dart';
 
 class aboutUI extends StatelessWidget {
   @override
@@ -17,8 +18,8 @@ class aboutUI extends StatelessWidget {
               width: double.infinity,
               height: MediaQuery.of(context).size.height / 3,
               fit: BoxFit.cover,
-              image: NetworkImage(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMEpUpzx7b1_ZgqmyVy-oqcOuvdWYQmu6h5w&usqp=CAU'),
+              image: AssetImage(
+                  "assets/images/help.png"),
             ),
             Positioned(
               bottom: -50.0,
@@ -27,8 +28,8 @@ class aboutUI extends StatelessWidget {
                 backgroundColor: Colors.white,
                 //backgroundImage: NetworkImage(
                 //"https://www.channelfutures.com/files/2009/01/managed-service-providers-merge_0.jpg"),
-                backgroundImage: NetworkImage(
-                    "https://thearchitecturedesigns.com/wp-content/uploads/2022/02/Hiring-Professional-Painters-1.jpg"),
+                backgroundImage: AssetImage(
+                    "assets/images/hire.jpg"),
               ),
             ),
           ],
@@ -57,22 +58,18 @@ class aboutUI extends StatelessWidget {
           )),
         ),
         ElevatedButton.icon(
-          onPressed: () {  
-            
-         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfilePage()),
-                        );
-
-          
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HelpPageUI()),
+            );
           },
           icon: Icon(
-            Icons.mail,
+            Icons.contact_phone,
             color: Colors.white,
           ),
           label: Text(
-            ' Rate Us',
+            ' Contact Us',
             style: TextStyle(color: Colors.white),
           ),
           // color: Colors.blue,

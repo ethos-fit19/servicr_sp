@@ -78,8 +78,8 @@ class _HelpPageUIState extends State<HelpPageUI> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height / 3,
                     fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMEpUpzx7b1_ZgqmyVy-oqcOuvdWYQmu6h5w&usqp=CAU'),
+                    image: AssetImage(
+                      "assets/images/help.png"),
                   ),
                 ),
               ],
