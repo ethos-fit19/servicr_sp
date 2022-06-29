@@ -103,7 +103,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     print('accepted appo' + acceptedAppointments.length.toString());
 
     await customersPerMonth(currentMonth);
-    await totalIncomeThisMonthNew(currentMonth);
+    //await totalIncomeThisMonthNew(currentMonth);
+    totalThisMonth=await totalIncomePerMonth(currentMonth, currentYear);
     List last =getLastMonth(currentMonth, currentYear);
      totalLastMonth = await totalIncomePerMonth(last[0],last[1]);
     percentage = await percentageThisMonth();
@@ -405,7 +406,7 @@ return [lastMonth.toString(),year.toString()];
                             mRight: 0,
                             child: ListTileCustom(
                               bgColor: Color(0xFFDEF7FF),
-                              pathIcon: "eyes.svg",
+                              pathIcon: "c1.svg",
                               title: "Total Customers",
                               subTitle: totalCustomersPerMonth.toString(),
                             ),

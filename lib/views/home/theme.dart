@@ -16,11 +16,11 @@ Color labelColor = const Color(0xFF485465);
 Color red = const Color(0xFFEB5757);
 
 TextStyle textBold = GoogleFonts.openSans().copyWith(
-    fontWeight: FontWeight.bold, fontSize: 24, color: purple1
+    fontWeight: FontWeight.bold, fontSize: 12, color: purple1
 );
 
 TextStyle textBold2 = GoogleFonts.poppins().copyWith(
-  fontWeight: FontWeight.bold, fontSize: 10, color: grayText,
+  fontWeight: FontWeight.bold, fontSize: 12, color: grayText,
   letterSpacing: 6 /100,
 );
 
